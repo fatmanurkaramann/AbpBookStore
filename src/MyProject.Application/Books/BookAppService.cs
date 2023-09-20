@@ -1,4 +1,5 @@
 ﻿using Abp.Application.Services;
+using Abp.Application.Services.Dto;
 using Abp.Domain.Repositories;
 using AutoMapper;
 using MyProject.Books.Dto;
@@ -44,5 +45,12 @@ namespace MyProject.Books
             await _bookManager.Update(book);
             return MapToEntityDto(book);
         }
+        public  List<BookDto> GetAllBooksAsync()
+        {
+            var books =_bookManager.GetAll();
+           var bookList = ObjectMapper.Map<List<BookDto>>(books);
+            return bookList;
+        }
+       
     }
 }

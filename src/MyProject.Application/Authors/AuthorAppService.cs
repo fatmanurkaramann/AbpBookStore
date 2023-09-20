@@ -26,12 +26,13 @@ namespace MyProject.Authors
         { 
 
             var author = ObjectMapper.Map<Author>(input);
-            var addedAuthor = await _authorManager.Create(author);
+            var addedAuthor = await _authorManager.CreateAsync(author);
+            await CurrentUnitOfWork.SaveChangesAsync();
             int authorId = addedAuthor.Id;
-            //var newAuthor = await _authorManager.GetById(authorId);
-            //var book = await _bookManager.GetByIdAsync(input.BookId);
-            //book.Author = newAuthor;
-            //await _bookManager.Update(book);
+            var newAuthor = await _authorManager.GetById(authorId);
+            var book = await _bookManager.GetByIdAsync(input.BookId);
+            book.Author = newAuthor;
+            await _bookManager.Update(book);
             return new AuthorDto { Id = authorId, Firstname = input.Firstname, Lastname = input.Lastname };
         }
         public override async Task<AuthorDto> UpdateAsync(AuthorDto input)

@@ -17,7 +17,7 @@ namespace MyProject.Models
             _authorRepository = authorRepository;
         }
 
-        public async Task<Author> Create(Author author)
+        public async Task<Author> CreateAsync(Author author)
         {
           return await _authorRepository.InsertAsync(author);
         }

@@ -9,9 +9,9 @@ namespace MyProject.Models
 {
     public interface IBookManager:IDomainService
     {
+        List<Book> GetAll();
         Task<Book> CreateAsync(Book entity);
         Task<Book> Update(Book entity);
-
         Task<Book> GetByIdAsync(int id);
     }
 }

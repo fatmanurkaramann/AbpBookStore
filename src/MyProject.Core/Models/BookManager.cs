@@ -30,5 +30,11 @@ namespace MyProject.Models
         {
            return await _bookRepository.UpdateAsync(entity);
         }
+        public List<Book> GetAll()
+        {
+            var book = _bookRepository.GetAllIncluding(b => b.Author, b => b.Category)
+                       .ToList();
+            return book;
+        }
     }
 }

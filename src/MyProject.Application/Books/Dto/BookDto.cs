@@ -1,5 +1,7 @@
 ﻿using Abp.Application.Services.Dto;
 using Abp.AutoMapper;
+using MyProject.Authors.Dto;
+using MyProject.Categories.Dto;
 using MyProject.Models;
 using System;
 using System.Collections.Generic;
@@ -24,7 +26,7 @@ namespace MyProject.Books.Dto
         public string ImagePath { get; set; }
         public DateTime PublishDate { get; set; }
         public string Description { get; set; }
-        public int AuthorId { get; set; }
-        public int CategoryId { get; set; }
+        public AuthorDto Author { get; set; }
+        public CategoryDto Category { get; set; }
     }
 }
