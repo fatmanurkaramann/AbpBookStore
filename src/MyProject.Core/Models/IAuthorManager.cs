@@ -8,6 +8,8 @@ namespace MyProject.Models
 {
     public interface IAuthorManager
     {
+        Task<Author> GetById(int id);
         Task<Author> Create(Author author);
+        Task<Author> UpdateAsync(Author author);
     }
 }

@@ -15,16 +15,30 @@ namespace MyProject.Authors
     public class AuthorAppService : AsyncCrudAppService<Author, AuthorDto, int, AuthorDto, CreateAuthorDto, AuthorDto>
     {
         private readonly IAuthorManager _authorManager;
-        public AuthorAppService(IRepository<Author, int> repository, IAuthorManager authorManager) : base(repository)
+        private readonly IBookManager _bookManager;
+        public AuthorAppService(IRepository<Author, int> repository, IAuthorManager authorManager, IBookManager bookManager) : base(repository)
         {
             _authorManager = authorManager;
+            _bookManager = bookManager;
         }
 
         public override async Task<AuthorDto> CreateAsync(CreateAuthorDto input)
-        {
-            var author = ObjectMapper.Map<Author>(input);
-            await _authorManager.Create(author);
+        { 
 
+            var author = ObjectMapper.Map<Author>(input);
+            var addedAuthor = await _authorManager.Create(author);
+            int authorId = addedAuthor.Id;
+            //var newAuthor = await _authorManager.GetById(authorId);
+            //var book = await _bookManager.GetByIdAsync(input.BookId);
+            //book.Author = newAuthor;
+            //await _bookManager.Update(book);
+            return new AuthorDto { Id = authorId, Firstname = input.Firstname, Lastname = input.Lastname };
+        }
+        public override async Task<AuthorDto> UpdateAsync(AuthorDto input)
+        {
+           var author = await _authorManager.GetById(input.Id);
+            ObjectMapper.Map(input, author);
+            await _authorManager.UpdateAsync(author);
             return MapToEntityDto(author);
         }
     }

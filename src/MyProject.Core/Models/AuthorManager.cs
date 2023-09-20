@@ -21,5 +21,15 @@ namespace MyProject.Models
         {
           return await _authorRepository.InsertAsync(author);
         }
+
+        public async Task<Author> GetById(int id)
+        {
+            return await _authorRepository.GetAsync(id);
+        }
+
+        public async Task<Author> UpdateAsync(Author author)
+        {
+            return await _authorRepository.UpdateAsync(author);
+        }
     }
 }
