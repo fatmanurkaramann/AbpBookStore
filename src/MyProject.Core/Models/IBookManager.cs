@@ -10,5 +10,8 @@ namespace MyProject.Models
     public interface IBookManager:IDomainService
     {
         Task<Book> CreateAsync(Book entity);
+        Task<Book> Update(Book entity);
+
+        Task<Book> GetByIdAsync(int id);
     }
 }

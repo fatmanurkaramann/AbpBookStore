@@ -20,5 +20,15 @@ namespace MyProject.Models
         {
             return await _bookRepository.InsertAsync(entiity);
         }
+
+        public async Task<Book> GetByIdAsync(int id)
+        {
+            return await _bookRepository.GetAsync(id);
+        }
+
+        public async Task<Book> Update(Book entity)
+        {
+           return await _bookRepository.UpdateAsync(entity);
+        }
     }
 }

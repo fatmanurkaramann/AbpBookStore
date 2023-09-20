@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace MyProject.Books
 {
-    public class BookAppService : AsyncCrudAppService<Book, BookDto, int, PagedBookResultRequestDto, CreateBookDto,BookDto>
+    public class BookAppService : AsyncCrudAppService<Book, BookDto, int, PagedBookResultRequestDto, CreateBookDto,BookDto>,IBookAppService
     {
         private readonly IBookManager _bookManager;
         public BookAppService(IRepository<Book, int> repository, IBookManager bookManager) : base(repository)
@@ -35,9 +35,14 @@ namespace MyProject.Books
                 CategoryId = input.CategoryId
             };
             await _bookManager.CreateAsync(book);
-
             return MapToEntityDto(book);
-
+        }
+        public override async Task<BookDto> UpdateAsync(BookDto input)
+        {
+            var book = await _bookManager.GetByIdAsync(input.Id);
+            ObjectMapper.Map(input, book);
+            await _bookManager.Update(book);
+            return MapToEntityDto(book);
         }
     }
 }
