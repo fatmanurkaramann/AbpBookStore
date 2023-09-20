@@ -21,5 +21,15 @@ namespace MyProject.Models
         {
            return await _categoryRepository.InsertAsync(category);
         }
+
+        public async Task<Category> GetByIdAsync(int Id)
+        {
+           return await _categoryRepository.GetAsync(Id);
+        }
+
+        public async Task<Category> Update(Category category)
+        {
+            return await _categoryRepository.UpdateAsync(category);
+        }
     }
 }

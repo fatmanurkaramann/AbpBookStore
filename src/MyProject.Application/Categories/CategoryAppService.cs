@@ -1,5 +1,6 @@
 ﻿using Abp.Application.Services;
 using Abp.Domain.Repositories;
+using MyProject.Authorization.Roles;
 using MyProject.Categories.Dto;
 using MyProject.Models;
 using System;
@@ -27,6 +28,15 @@ namespace MyProject.Categories
             };
             await _categoryManager.Create(category);
             return MapToEntityDto(category);
+        }
+        public override async Task<CategoryDto> UpdateAsync(CategoryDto input)
+        {
+            var category = await _categoryManager.GetByIdAsync(input.Id);
+            ObjectMapper.Map(input, category);
+            await _categoryManager.Update(category);
+            return MapToEntityDto(category);
+
+            
         }
     }
 }
