@@ -12,8 +12,8 @@ namespace MyProject.Adresses.Dto
     {
         public AddressMapProfile()
         {
-            CreateMap<AddressDto, Address>().ReverseMap();
             CreateMap<CreateAddressDto, Address>().ReverseMap();
+            CreateMap<AddressDto, Address>().ReverseMap();
 
         }
     }
