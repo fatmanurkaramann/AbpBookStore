@@ -1,9 +1,13 @@
 ﻿using Abp.Application.Services;
 using Abp.Application.Services.Dto;
+using Abp.Collections.Extensions;
 using Abp.Domain.Repositories;
+using Abp.Extensions;
 using AutoMapper;
+using MyProject.Authorization.Users;
 using MyProject.Books.Dto;
 using MyProject.Models;
+using MyProject.Users.Dto;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,7 +16,7 @@ using System.Threading.Tasks;
 
 namespace MyProject.Books
 {
-    public class BookAppService : AsyncCrudAppService<Book, BookDto, int, PagedBookResultRequestDto, CreateBookDto,BookDto>,IBookAppService
+    public class BookAppService : AsyncCrudAppService<Book, BookDto, int, PagedBookResultRequestDto, CreateBookDto, BookDto>, IBookAppService
     {
         private readonly IBookManager _bookManager;
         public BookAppService(IRepository<Book, int> repository, IBookManager bookManager) : base(repository)
@@ -45,12 +49,19 @@ namespace MyProject.Books
             await _bookManager.Update(book);
             return MapToEntityDto(book);
         }
-        public  List<BookDto> GetAllBooksAsync()
+
+
+        protected override IQueryable<Book> CreateFilteredQuery(PagedBookResultRequestDto input)
         {
-            var books =_bookManager.GetAll();
-           var bookList = ObjectMapper.Map<List<BookDto>>(books);
-            return bookList;
+            var query = Repository.GetAllIncluding(x => x.Author, async => async.Category);
+
+            if (!input.Keyword.IsNullOrWhiteSpace())
+            {
+                query = query.Where(x => x.Name.Contains(input.Keyword));
+            }
+
+            return query;
         }
-       
+
     }
 }

@@ -1,7 +1,9 @@
 ﻿using Abp.Application.Services;
 using Abp.Domain.Repositories;
+using Abp.Extensions;
 using MyProject.Authorization.Users;
 using MyProject.Authors.Dto;
+using MyProject.Books.Dto;
 using MyProject.Categories.Dto;
 using MyProject.Models;
 using System;
@@ -12,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace MyProject.Authors
 {
-    public class AuthorAppService : AsyncCrudAppService<Author, AuthorDto, int, AuthorDto, CreateAuthorDto, AuthorDto>
+    public class AuthorAppService : AsyncCrudAppService<Author, AuthorDto, int, PagedAuthorResultRequestDto, CreateAuthorDto, AuthorDto>
     {
         private readonly IAuthorManager _authorManager;
         private readonly IBookManager _bookManager;
@@ -41,6 +43,18 @@ namespace MyProject.Authors
             ObjectMapper.Map(input, author);
             await _authorManager.UpdateAsync(author);
             return MapToEntityDto(author);
+        }
+
+        protected override IQueryable<Author> CreateFilteredQuery(PagedAuthorResultRequestDto input)
+        {
+            var query = Repository.GetAllIncluding(b => b.Addresses, a => a.Universities);
+
+            if (!input.Keyword.IsNullOrWhiteSpace())
+            {
+                query = query.Where(x => x.Firstname.Contains(input.Keyword) || x.Lastname.Contains(input.Keyword));
+            }
+
+            return query;
         }
     }
 }

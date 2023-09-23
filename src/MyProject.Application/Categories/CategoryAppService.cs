@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace MyProject.Categories
 {
-    public class CategoryAppService : AsyncCrudAppService<Category, CategoryDto, int, CategoryDto, CreateCategoryDto, CategoryDto>
+    public class CategoryAppService : AsyncCrudAppService<Category, CategoryDto, int, PagedCategoryResultRequestDto, CreateCategoryDto, CategoryDto>
     {
         private readonly ICategoryManager _categoryManager;
         public CategoryAppService(IRepository<Category, int> repository, ICategoryManager categoryManager) : base(repository)
